@@ -1,47 +1,50 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
-
-import { savePristine, revertPristine } from "../../actions";
+import PropTypes from 'prop-types';
 
 import Panel from "./Panel";
-import View from "../View";
-import Edit from "../Edit";
-
-function mapDispatchToProps(dispatch) {
-  return {
-    savePristine: () => dispatch(savePristine()),
-    revertPristine: () => dispatch(revertPristine())
-  };
-}
 
 class PanelComponent extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { isEditMode: false };
+  static propTypes = {
+    header: PropTypes.string.isRequired,
+    view: PropTypes.element.isRequired,
+    edit: PropTypes.element.isRequired,
+    onSave: PropTypes.func,
+    onEdit: PropTypes.func,
+    onCancel: PropTypes.func,
   }
+
+  static defaultProps = {
+    onSave: ()=>{},
+    onEdit: ()=>{},
+    onCancel: ()=>{},
+  }
+
+  state = { isEditMode: false };
+  
   handleEdit = () => {
-    const { savePristine } = this.props;
-    savePristine();
+    const { onEdit } = this.props;
+    onEdit();
     this.setState({ isEditMode: true });
   };
   handleSave = () => {
-    const { state } = this.props;
-    console.log(state);
+    const { onSave } = this.props;
+    onSave();
     this.setState({ isEditMode: false });
   };
   handleCancel = () => {
-    const { revertPristine } = this.props;
-    revertPristine();
+    const { onCancel } = this.props;
+    onCancel();
     this.setState({ isEditMode: false });
   };
   render() {
     const { isEditMode } = this.state;
+    const { header, view, edit } = this.props;
 
     return (
       <Panel
-        header={"Switchable Panel"}
-        viewComp={<View />}
-        editComp={<Edit />}
+        header={header}
+        viewComp={view}
+        editComp={edit}
         isEditMode={isEditMode}
         onEdit={this.handleEdit}
         onSave={this.handleSave}
@@ -51,6 +54,4 @@ class PanelComponent extends Component {
   }
 }
 
-export default connect(state => {
-  return {state};
-}, mapDispatchToProps)(PanelComponent);
+export default PanelComponent;

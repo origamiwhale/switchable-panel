@@ -3,7 +3,7 @@ import { Provider } from "react-redux";
 
 import "./App.css";
 
-import Panel from "./components/Panel";
+import NameSurnamePanel from "./components/NameSurnamePanel";
 import store from './store';
 
 class App extends Component {
@@ -11,7 +11,7 @@ class App extends Component {
     return (
       <Provider store={store}>
         <div className="App">
-          <Panel />
+          <NameSurnamePanel />
         </div>
       </Provider>
     );
